@@ -87,6 +87,8 @@ def main():
     while True:
         i = win.getMouse()
         j = p.checkClick(i)
+        if j == None:
+            continue
         funcs.get(j)()
         if funcs.get(j) == p.QUITwin:
             break
