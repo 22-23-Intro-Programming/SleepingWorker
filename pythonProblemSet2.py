@@ -1,10 +1,12 @@
+#input a number when called and it prints the factorial of the number
 def factorial(num):
     num = 1
     for i in range(1, num + 1):
         num *= i
     print(num)
 
-
+#takes user input of a string and returns the string with every character twice
+#ex.  hello  ->  hheelllloo
 def doubleIt():
     word = input("word: ")
     total = ""
@@ -12,7 +14,8 @@ def doubleIt():
         total += word[i] + word[i]
     print(total)
 
-
+#takes user input and returns it in camelCase format for files
+#ex. Hello I am rowan/ -> helloIAmRowan-
 def camel_case():
     name = input("name: ")
     name = name.title()
