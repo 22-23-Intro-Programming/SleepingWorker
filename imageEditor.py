@@ -52,6 +52,31 @@ def redBoost(im, b):
                     p = color_rgb(int(av), int(av), int(av))
                     im.setPixel(j, i, p)
 
+def greenBoost(im, b):
+    for i in range(im.getHeight()):
+        for j in range(im.getWidth()):
+            pix = im.getPixel(j, i)
+            if pix != b:
+                if (pix[1] > (pix[0] + 25)) and (pix[1] > (pix[2] + 25)):
+                    continue
+                else:
+                    av = (pix[0] + pix[1] + pix[2])/3
+                    p = color_rgb(int(av), int(av), int(av))
+                    im.setPixel(j, i, p)
+
+def blueBoost(im, b):
+    for i in range(im.getHeight()):
+        for j in range(im.getWidth()):
+            pix = im.getPixel(j, i)
+            if pix != b:
+                if (pix[2] > (pix[0] + 25)) and (pix[2] > (pix[1] + 25)):
+                    print("found one")
+                    continue
+                else:
+                    av = (pix[0] + pix[1] + pix[2])/3
+                    p = color_rgb(int(av), int(av), int(av))
+                    im.setPixel(j, i, p)
+
 def blur(im, b):
     colors = []
     k = 0
@@ -115,10 +140,10 @@ def main():
     C.Color("yellow")
     C.Text("contrast")
     
-    R = RectButton(win, Point(650, 0), Point(750, 100))
-    R.Draw()
-    R.Color("orange")
-    R.Text("red boost")
+    RB = RectButton(win, Point(650, 0), Point(750, 100))
+    RB.Draw()
+    RB.Color("orange")
+    RB.Text("red boost")
 
     B = RectButton(win, Point(25, 150), Point(125, 250))
     B.Draw()
@@ -129,6 +154,16 @@ def main():
     N.Draw()
     N.Color("green")
     N.Text("reset")
+
+    BB = RectButton(win, Point(0, 400), Point(100, 500))
+    BB.Draw()
+    BB.Color("cyan")
+    BB.Text("blue boost")
+
+    GB = RectButton(win, Point(0, 550), Point(100, 650))
+    GB.Draw()
+    GB.Color("green")
+    GB.Text("green boost")
 
     Q = RectButton(win, Point(675, 675), Point(775, 775))
     Q.Draw()
@@ -151,8 +186,12 @@ def main():
             grayScale(I, b)
         elif C.IsClicked(p):
             contrast(I, b)
-        elif R.IsClicked(p):
+        elif RB.IsClicked(p):
             redBoost(I, b)
+        elif BB.IsClicked(p):
+            blueBoost(I, b)
+        elif GB.IsClicked(p):
+            greenBoost(I, b)
         elif B.IsClicked(p):
             blur(I, b)
 
