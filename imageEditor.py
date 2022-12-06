@@ -130,31 +130,28 @@ def blur(im, b):
             k += 1
 
 def edge(im, b):
-    superContrast(im, b)
+    #superContrast(im, b)
     colors = []
     k = 0
-    print(1)
-    print(im.getHeight() * im.getWidth())
     for i in range(1, im.getHeight() - 1, 1):
         for j in range(1, im.getWidth() - 1, 1):
             pix = im.getPixel(j, i)
             if pix != b:
                 av = (pix[0] + pix[1] + pix[2])/3
                 up = im.getPixel(j+1, i)
-                up = (up[0] + up[1] + up[2])/3
                 down = im.getPixel(j-1, i)
-                down = (down[0] + down[1] + down[2])/3
                 right = im.getPixel(j, i+1)
-                right = (right[0] + right[1] + right[2])/3
                 left = im.getPixel(j, i-1)
-                left = (left[0] + left[1] + left[2])/3
-                if (abs(av - up) > 50) or (abs(av - down) > 50) or (abs(av - right) > 50) or (abs(av - left) > 50):
+                if (abs(pix[0] - up[0]) > 25) or (abs(pix[0] - down[0]) > 25) or (abs(pix[0] - right[0]) > 25) or (abs(pix[0] - left[0]) > 25):
+                    colors.append(1)
+                elif (abs(pix[1] - up[1]) > 25) or (abs(pix[1] - down[1]) > 25) or (abs(pix[1] - right[1]) > 25) or (abs(pix[1] - left[1]) > 25):
+                    colors.append(1)
+                elif (abs(pix[2] - up[2]) > 25) or (abs(pix[2] - down[2]) > 25) or (abs(pix[2] - right[2]) > 25) or (abs(pix[2] - left[2]) > 25):
                     colors.append(1)
                 else:
                     colors.append(0)
             else:
                 colors.append(0)
-    print(len(colors))
     for i in range(1, im.getHeight() - 1, 1):
         for j in range(1, im.getWidth() - 1, 1):
             if colors[k] == 1:
@@ -177,7 +174,7 @@ def main():
     win = GraphWin("Image Editor", 800, 800)
     win.setBackground(background)
 
-    I = Image(Point(400, 450), "veitchii.png")
+    I = Image(Point(400, 450), "ball.png")
     I.draw(win)
 
     D = RectButton(win, Point(200, 0), Point(300, 100))
@@ -241,7 +238,7 @@ def main():
         if Q.IsClicked(p):
             break
         elif N.IsClicked(p):
-            I = Image(Point(400, 450), "veitchii.png")
+            I = Image(Point(400, 450), "ball.png")
             I.draw(win)
         elif D.IsClicked(p):
             darken(I, b)
