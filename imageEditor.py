@@ -40,6 +40,23 @@ def contrast(im, b):
                     p = color_rgb(int(pix[0]*.75), int(pix[1]*.75), int(pix[2]*.75))
                     im.setPixel(j, i, p)
 
+def superContrast(im, b):
+    for i in range(im.getHeight()):
+        for j in range(im.getWidth()):
+            pix = im.getPixel(j, i)
+            if pix != b:
+                av = (pix[0] + pix[1] + pix[2])/3
+                '''if av < 86:
+                    im.setPixel(j, i, color_rgb(0, 0, 0))
+                elif av < 171:
+                    im.setPixel(j, i, color_rgb(127, 127, 127))
+                else:
+                    im.setPixel(j, i, color_rgb(225, 225, 225))'''
+                if av > 127:
+                    im.setPixel(j, i, color_rgb(225, 225, 225))
+                else:
+                    im.setPixel(j, i, color_rgb(0, 0, 0))
+
 def redBoost(im, b):
     for i in range(im.getHeight()):
         for j in range(im.getWidth()):
@@ -57,7 +74,7 @@ def greenBoost(im, b):
         for j in range(im.getWidth()):
             pix = im.getPixel(j, i)
             if pix != b:
-                if (pix[1] > (pix[0] + 25)) and (pix[1] > (pix[2] + 25)):
+                if (pix[1] > (pix[0])) and (pix[1] > (pix[2])):
                     continue
                 else:
                     av = (pix[0] + pix[1] + pix[2])/3
@@ -105,10 +122,53 @@ def blur(im, b):
                 av3 = int((up[2] + down[2] + right[2] + left[2])/4)
                 av4 = [av1, av2, av3]
                 colors.append(av4)
+            else:
+                colors.append(b)
     for i in range(im.getHeight()):
         for j in range(im.getWidth()):
             im.setPixel(j, i, color_rgb(colors[k][0], colors[k][1], colors[k][2]))
             k += 1
+
+def edge(im, b):
+    superContrast(im, b)
+    colors = []
+    k = 0
+    print(1)
+    print(im.getHeight() * im.getWidth())
+    for i in range(1, im.getHeight() - 1, 1):
+        for j in range(1, im.getWidth() - 1, 1):
+            pix = im.getPixel(j, i)
+            if pix != b:
+                av = (pix[0] + pix[1] + pix[2])/3
+                up = im.getPixel(j+1, i)
+                up = (up[0] + up[1] + up[2])/3
+                down = im.getPixel(j-1, i)
+                down = (down[0] + down[1] + down[2])/3
+                right = im.getPixel(j, i+1)
+                right = (right[0] + right[1] + right[2])/3
+                left = im.getPixel(j, i-1)
+                left = (left[0] + left[1] + left[2])/3
+                if (abs(av - up) > 50) or (abs(av - down) > 50) or (abs(av - right) > 50) or (abs(av - left) > 50):
+                    colors.append(1)
+                else:
+                    colors.append(0)
+            else:
+                colors.append(0)
+    print(len(colors))
+    for i in range(1, im.getHeight() - 1, 1):
+        for j in range(1, im.getWidth() - 1, 1):
+            if colors[k] == 1:
+                im.setPixel(j, i, color_rgb(0, 0, 0))
+            else:
+                im.setPixel(j, i, color_rgb(255, 255, 255))
+            k+=1
+                    
+                
+                
+                
+                
+                
+                
         
 
 def main():
@@ -165,6 +225,11 @@ def main():
     GB.Color("green")
     GB.Text("green boost")
 
+    E = RectButton(win, Point(0, 700), Point(100, 800))
+    E.Draw()
+    E.Color("purple")
+    E.Text("edge thing")
+
     Q = RectButton(win, Point(675, 675), Point(775, 775))
     Q.Draw()
     Q.Color("red")
@@ -185,7 +250,7 @@ def main():
         elif G.IsClicked(p):
             grayScale(I, b)
         elif C.IsClicked(p):
-            contrast(I, b)
+            superContrast(I, b)
         elif RB.IsClicked(p):
             redBoost(I, b)
         elif BB.IsClicked(p):
@@ -194,6 +259,8 @@ def main():
             greenBoost(I, b)
         elif B.IsClicked(p):
             blur(I, b)
+        elif E.IsClicked(p):
+            edge(I, b)
 
 
     win.close()
