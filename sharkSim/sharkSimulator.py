@@ -49,16 +49,17 @@ def main():
     Reset.Draw()
     '''creating the instances of sharks and fish'''
     S1 = Shark(win)
-    S2 = Shark(win)
     F1 = Fish(win)
     F2 = Fish(win)
     F3 = Fish(win)
     '''puts shark and fish instances in lists'''
     fishes = [F1, F2, F3]
-    sharks = [S1, S2]
+    sharks = [S1]
     oF = fishes.copy()
     oS = sharks.copy()
     '''runs to allow buttons to be clicked mulitple times and run forever'''
+    for i in oF + oS:
+        i.Reset(oS + oF)
     while True:
         '''waits for mouse click and gets mouse position'''
         p = win.getMouse()

@@ -23,12 +23,11 @@ class Fish:
             for i in l:
                 d.append(i.getPosition())
             k = 0
-            for j in range(len(d)):
-                if d.count(d[j]) > 1:
-                    l[j].setPosition(random.randint(0,19),random.randint(0,19))
+            for j in d:
+                if d.count(j) > 1:
+                    l[d.index(j)].setPosition(random.randint(0,19),random.randint(0,19))
                     continue
                 k += 1
-            print(k)
             if k == len(d):
                 break 
         self.pic.undraw()
