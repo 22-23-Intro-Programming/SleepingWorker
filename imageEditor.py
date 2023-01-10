@@ -1,4 +1,5 @@
 from button import *
+import math
 
 def darken(im, b):
     for i in range(im.getHeight()):
@@ -142,14 +143,18 @@ def edge(im, b):
                 down = im.getPixel(j-1, i)
                 right = im.getPixel(j, i+1)
                 left = im.getPixel(j, i-1)
-                if (abs(pix[0] - up[0]) > 25) or (abs(pix[0] - down[0]) > 25) or (abs(pix[0] - right[0]) > 25) or (abs(pix[0] - left[0]) > 25):
-                    colors.append(1)
-                elif (abs(pix[1] - up[1]) > 25) or (abs(pix[1] - down[1]) > 25) or (abs(pix[1] - right[1]) > 25) or (abs(pix[1] - left[1]) > 25):
-                    colors.append(1)
-                elif (abs(pix[2] - up[2]) > 25) or (abs(pix[2] - down[2]) > 25) or (abs(pix[2] - right[2]) > 25) or (abs(pix[2] - left[2]) > 25):
-                    colors.append(1)
-                else:
-                    colors.append(0)
+                '''up = math.sqrt((abs(up[0]-pix[0]) * abs(up[0]-pix[0])) + (abs(up[1]-pix[1]) * abs(up[1]-pix[1])) + (abs(up[2]-pix[2]) * abs(up[2]-pix[2])))
+                down = math.sqrt((abs(down[0]-pix[0]) * abs(down[0]-pix[0])) + (abs(down[1]-pix[1]) * abs(down[1]-pix[1])) + (abs(down[2]-pix[2]) * abs(down[2]-pix[2])))
+                left = math.sqrt((abs(left[0]-pix[0]) * abs(left[0]-pix[0])) + (abs(left[1]-pix[1]) * abs(left[1]-pix[1])) + (abs(left[2]-pix[2]) * abs(left[2]-pix[2])))
+                right = math.sqrt((abs(right[0]-pix[0]) * abs(right[0]-pix[0])) + (abs(right[1]-pix[1]) * abs(right[1]-pix[1])) + (abs(right[2]-pix[2]) * abs(right[2]-pix[2])))'''
+                c = []
+                for z in [up, down, left, right]:
+                    z = math.sqrt((abs(z[0]-pix[0]) * abs(z[0]-pix[0])) + (abs(z[1]-pix[1]) * abs(z[1]-pix[1])) + (abs(z[2]-pix[2]) * abs(z[2]-pix[2])))
+                    if z > 25:
+                        c.append(1)
+                    else:
+                        c.append(0)
+                colors.append(max(c))
             else:
                 colors.append(0)
     for i in range(1, im.getHeight() - 1, 1):
@@ -174,7 +179,7 @@ def main():
     win = GraphWin("Image Editor", 800, 800)
     win.setBackground(background)
 
-    I = Image(Point(400, 450), "ball.png")
+    I = Image(Point(400, 450), "plant.png")
     I.draw(win)
 
     D = RectButton(win, Point(200, 0), Point(300, 100))
@@ -238,7 +243,7 @@ def main():
         if Q.IsClicked(p):
             break
         elif N.IsClicked(p):
-            I = Image(Point(400, 450), "ball.png")
+            I = Image(Point(400, 450), "plant.png")
             I.draw(win)
         elif D.IsClicked(p):
             darken(I, b)
